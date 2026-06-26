@@ -1,128 +1,160 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>도매상단 - 정직한 시세표</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>도매상단</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { background-color: #111827; color: #f3f4f6; }
-    .tab-active { border-bottom: 2px solid #22c55e; color: #22c55e; font-weight: bold; }
-    .tab-inactive { color: #9ca3af; }
+    /* 탭 화면 전환용 CSS */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .tab-btn.active { color: #22c55e; border-bottom: 2px solid #22c55e; font-weight: bold; }
+    .tab-btn { color: #9ca3af; border-bottom: 2px solid transparent; }
   </style>
 </head>
-<body class="pb-24">
-  <!-- Install Banner -->
-  <div class="bg-gray-800 text-xs py-2 px-4 flex justify-between items-center">
-    <span>앱을 설치하고 터치 한 번으로 매일 시세를 확인하세요.</span>
-    <button class="bg-green-600 text-white px-2 py-1 rounded text-[10px]">홈 화면에 추가</button>
+<body class="bg-[#0f172a] text-gray-100 pb-32 font-sans">
+  
+  <!-- 상단 배너 -->
+  <div class="bg-gray-800 text-xs p-3 flex justify-between items-center border-b border-gray-700">
+    <span class="text-gray-300">앱을 설치하고 터치 한 번으로 매일 시세를 확인하세요.</span>
+    <button onclick="alert('홈 화면에 추가하려면 스마트폰 브라우저 메뉴(⋮)에서 \'홈 화면에 추가\'를 선택해주세요.')" class="bg-green-600 text-white px-3 py-1.5 rounded font-bold shrink-0 ml-2">홈 화면에 추가</button>
   </div>
 
-  <!-- Header -->
-  <header class="p-4 border-b border-gray-800 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <i class="fa-solid fa-layer-group text-green-500 text-xl"></i>
-      <h1 class="text-xl font-bold tracking-tight">도매상단</h1>
+  <!-- 헤더 -->
+  <header class="p-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <span class="text-green-500 text-2xl">📚</span>
+      <h1 class="text-xl font-bold">도매상단</h1>
     </div>
-    <span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded-full"><i class="fa-solid fa-location-dot text-red-400"></i> 해운대 거점</span>
+    <span class="text-xs bg-gray-800 text-gray-300 px-3 py-1 rounded-full border border-gray-700">📍 해운대 거점</span>
   </header>
 
-  <!-- Global LME Card -->
-  <div class="m-4 p-4 bg-gray-800 rounded-lg border border-gray-700 shadow-lg">
-    <h2 class="text-sm text-gray-400 mb-1">🌐 LME 구리 국제 기준가 (오늘의 원가)</h2>
-    <div class="text-2xl font-bold text-white mb-1">1kg = 20,000원</div>
-    <div class="text-xs text-gray-500">매일 오전 9시 자동 업데이트 됨</div>
+  <!-- 메인 연락처 안내 -->
+  <div class="mx-4 mb-2 text-center bg-gray-800 p-3 rounded-lg border border-gray-700">
+    <p class="text-lg font-bold text-green-400">📞 010 - 5813 - 3339</p>
+    <p class="text-xs text-gray-400 mt-1">(문자 메세지 남겨 주시기 바랍니다)</p>
   </div>
 
-  <!-- Tabs -->
-  <div class="flex text-center border-b border-gray-800">
-    <button class="flex-1 py-3 text-sm tab-active" onclick="switchTab(1)" id="tab1">1) 상장형(비철)</button>
-    <button class="flex-1 py-3 text-sm tab-inactive" onclick="switchTab(2)" id="tab2">2) 코넥스형(폐자원)</button>
-    <button class="flex-1 py-3 text-sm tab-inactive" onclick="switchTab(3)" id="tab3">3) 작업철 감정</button>
-  </div>
-
-  <!-- Content 1: 비철 -->
-  <div id="content1" class="p-4">
-    <div class="flex text-xs text-gray-500 mb-2 px-2">
-      <div class="flex-1">품목</div>
-      <div class="w-24 text-right">kg 단가</div>
-      <div class="w-20 text-right">전일대비</div>
+  <!-- 시세표 메인 화면 -->
+  <div class="mx-4 mb-4 p-5 bg-gray-800 rounded-xl border border-gray-700">
+    <div class="flex items-center text-blue-400 text-sm mb-2">
+      <span>🌐 LME 구리 국제 기준가 (오늘의 원가)</span>
     </div>
-    <!-- Item 1 -->
-    <div class="flex items-center py-3 border-b border-gray-800 px-2">
-      <div class="flex-1">
-        <div class="font-bold text-red-400 text-base">꽈배기동</div>
+    <div class="text-3xl font-bold mb-2">1kg = 20,000원</div>
+    <div class="text-xs text-gray-400">매일 오전 9시 자동 업데이트 됨</div>
+  </div>
+
+  <!-- 탭 버튼 -->
+  <div class="flex border-b border-gray-700 px-4 text-sm mt-6">
+    <button onclick="changeTab('tab1')" id="btn-tab1" class="tab-btn active flex-1 pb-3 text-center transition-all">1) 상장형(비철)</button>
+    <button onclick="changeTab('tab2')" id="btn-tab2" class="tab-btn flex-1 pb-3 text-center transition-all">2) 코넥스형(폐자원)</button>
+    <button onclick="changeTab('tab3')" id="btn-tab3" class="tab-btn flex-1 pb-3 text-center transition-all">3) 작업철 감정</button>
+  </div>
+
+  <!-- 탭 1: 상장형(비철) -->
+  <div id="tab1" class="tab-content active px-4 pt-4">
+    <div class="flex justify-between text-xs text-gray-400 mb-4 px-1">
+      <span>품목</span>
+      <div class="flex space-x-8">
+        <span>kg 단가</span>
+        <span>전일대비</span>
+      </div>
+    </div>
+    
+    <div class="flex justify-between items-center py-3 border-b border-gray-800">
+      <div>
+        <div class="font-bold text-red-400 text-lg">꽈배기동</div>
         <div class="text-xs text-gray-400">A급 구리선 (90% 적용)</div>
       </div>
-      <div class="w-24 text-right font-bold text-lg">18,000</div>
-      <div class="w-20 text-right text-sm text-red-500">▲ 300</div>
+      <div class="flex items-center space-x-6">
+        <span class="font-bold text-lg">18,000</span>
+        <span class="text-red-500 text-sm w-12 text-right">▲ 300</span>
+      </div>
     </div>
-    <!-- Item 2 -->
-    <div class="flex items-center py-3 border-b border-gray-800 px-2">
-      <div class="flex-1">
-        <div class="font-bold text-red-400 text-base">상동</div>
+    
+    <div class="flex justify-between items-center py-3 border-b border-gray-800">
+      <div>
+        <div class="font-bold text-red-300 text-lg">상동</div>
         <div class="text-xs text-gray-400">깨끗한 파이프 (85% 적용)</div>
       </div>
-      <div class="w-24 text-right font-bold text-lg">17,000</div>
-      <div class="w-20 text-right text-sm text-red-500">▲ 200</div>
+      <div class="flex items-center space-x-6">
+        <span class="font-bold text-lg">17,000</span>
+        <span class="text-red-500 text-sm w-12 text-right">▲ 200</span>
+      </div>
     </div>
-    <!-- Item 3 -->
-    <div class="flex items-center py-3 border-b border-gray-800 px-2">
-      <div class="flex-1">
-        <div class="font-bold text-blue-400 text-base">파동</div>
+    
+    <div class="flex justify-between items-center py-3 border-b border-gray-800">
+      <div>
+        <div class="font-bold text-blue-400 text-lg">파동</div>
         <div class="text-xs text-gray-400">도금/이물질 (75% 적용)</div>
       </div>
-      <div class="w-24 text-right font-bold text-lg">15,000</div>
-      <div class="w-20 text-right text-sm text-blue-500">▼ 150</div>
+      <div class="flex items-center space-x-6">
+        <span class="font-bold text-lg">15,000</span>
+        <span class="text-blue-500 text-sm w-12 text-right">▼ 150</span>
+      </div>
     </div>
-    <!-- Item 4 -->
-    <div class="flex items-center py-3 border-b border-gray-800 px-2">
-      <div class="flex-1">
-        <div class="font-bold text-red-400 text-base">신주 (황동)</div>
+    
+    <div class="flex justify-between items-center py-3">
+      <div>
+        <div class="font-bold text-red-300 text-lg">신주 (황동)</div>
         <div class="text-xs text-gray-400">절봉/노베 혼합 (50% 적용)</div>
       </div>
-      <div class="w-24 text-right font-bold text-lg">10,000</div>
-      <div class="w-20 text-right text-sm text-red-500">▲ 50</div>
+      <div class="flex items-center space-x-6">
+        <span class="font-bold text-lg">10,000</span>
+        <span class="text-red-500 text-sm w-12 text-right">▲ 50</span>
+      </div>
     </div>
   </div>
 
-  <!-- Content 2: 폐자원 -->
-  <div id="content2" class="p-4 hidden">
-     <div class="bg-gray-800 p-4 rounded-lg mb-4 text-center">
-        <h3 class="font-bold mb-2">도시광산 폐자원 단가</h3>
-        <p class="text-sm text-gray-400 mb-2">통신기판: 4,000원 / 청기판: 2,500원</p>
-        <div class="text-xs text-yellow-500"><i class="fa-solid fa-coins"></i> 거래 시 상평통보 순환토큰 적립</div>
-     </div>
-     <button class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg"><i class="fa-solid fa-camera mr-2"></i> 기판 사진 감정받기</button>
+  <!-- 탭 2: 코넥스형(폐자원) -->
+  <div id="tab2" class="tab-content px-4 pt-6">
+    <div class="bg-gray-800 rounded-xl p-6 text-center border border-gray-700 mb-6 shadow-lg">
+      <h3 class="font-bold text-lg mb-4 text-white">도시광산 폐자원 단가</h3>
+      <p class="text-sm text-gray-300 mb-2">통신기판: 4,000원부터~ / 청기판: 2,500원부터~</p>
+      <p class="text-sm text-gray-300">컴퓨터 본체: 8,000원부터~</p>
+    </div>
+    <button onclick="window.location.href='sms:01058133339'" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg shadow-lg">
+      📸 기판 사진 감정받기
+    </button>
   </div>
 
-  <!-- Content 3: 작업철 -->
-  <div id="content3" class="p-4 hidden">
-     <div class="bg-gray-800 p-4 rounded-lg mb-4 text-center">
-        <i class="fa-solid fa-screwdriver-wrench text-3xl text-gray-500 mb-3"></i>
-        <h3 class="font-bold mb-2">작업철 감정</h3>
-        <p class="text-sm text-gray-400">모터, 실외기 등은 속을 봐야 정확한 가치를 알 수 있습니다.</p>
-     </div>
-     <button class="w-full bg-green-600 text-white font-bold py-3 rounded-lg"><i class="fa-solid fa-comments mr-2"></i> 사진 찍고 무료 견적 채팅하기</button>
+  <!-- 탭 3: 작업철 감정 -->
+  <div id="tab3" class="tab-content px-4 pt-6">
+    <div class="bg-gray-800 rounded-xl p-6 text-center border border-gray-700 mb-6 shadow-lg">
+      <div class="text-4xl mb-4">🛠️</div>
+      <h3 class="font-bold text-xl mb-3 text-white">작업철 감정</h3>
+      <p class="text-sm text-gray-400 mb-4">모터, 실외기 등은 속을 봐야 정확한 가치를 알 수 있습니다.</p>
+      <p class="text-sm text-green-400 font-bold bg-gray-900 py-2 rounded">산업단지(B2B,B2C) 산업기계 중고 거래</p>
+    </div>
+    <button onclick="window.location.href='sms:01058133339'" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl text-lg shadow-lg">
+      💬 사진 찍고 무료 견적 채팅하기
+    </button>
   </div>
 
-  <!-- Floating Calc Button -->
-  <div class="fixed bottom-0 left-0 w-full p-4 bg-gray-900 border-t border-gray-800">
-     <button class="w-full bg-gray-700 text-white font-bold py-3 rounded-lg shadow-lg border border-gray-600"><i class="fa-solid fa-calculator mr-2"></i> 미리 계산하기 및 예약</button>
+  <!-- 하단 고정 버튼 -->
+  <div style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: #1e293b; padding: 16px; border-top: 1px solid #334155; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.3);">
+     <button onclick="window.location.href='sms:01058133339'" 
+             style="width: 100%; background: #334155; color: white; font-weight: bold; padding: 18px; border-radius: 12px; border: 1px solid #475569; font-size: 16px;">
+       📑 미리 계산하기 및 예약
+     </button>
   </div>
 
+  <!-- 탭 전환 자바스크립트 -->
   <script>
-    function switchTab(tabNum) {
-      for(let i=1; i<=3; i++) {
-        document.getElementById('content'+i).classList.add('hidden');
-        document.getElementById('tab'+i).classList.remove('tab-active');
-        document.getElementById('tab'+i).classList.add('tab-inactive');
-      }
-      document.getElementById('content'+tabNum).classList.remove('hidden');
-      document.getElementById('tab'+tabNum).classList.remove('tab-inactive');
-      document.getElementById('tab'+tabNum).classList.add('tab-active');
+    function changeTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById('btn-' + tabId).classList.add('active');
     }
   </script>
+
 </body>
 </html>
