@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>도매상단 - 정직한 시세표</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { background-color: #111827; color: #f3f4f6; }
+    .tab-active { border-bottom: 2px solid #22c55e; color: #22c55e; font-weight: bold; }
+    .tab-inactive { color: #9ca3af; }
+  </style>
+</head>
+<body class="pb-24">
+  <!-- Install Banner -->
+  <div class="bg-gray-800 text-xs py-2 px-4 flex justify-between items-center">
+    <span>앱을 설치하고 터치 한 번으로 매일 시세를 확인하세요.</span>
+    <button class="bg-green-600 text-white px-2 py-1 rounded text-[10px]">홈 화면에 추가</button>
+  </div>
+
+  <!-- Header -->
+  <header class="p-4 border-b border-gray-800 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-layer-group text-green-500 text-xl"></i>
+      <h1 class="text-xl font-bold tracking-tight">도매상단</h1>
+    </div>
+    <span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded-full"><i class="fa-solid fa-location-dot text-red-400"></i> 해운대 거점</span>
+  </header>
+
+  <!-- Global LME Card -->
+  <div class="m-4 p-4 bg-gray-800 rounded-lg border border-gray-700 shadow-lg">
+    <h2 class="text-sm text-gray-400 mb-1">🌐 LME 구리 국제 기준가 (오늘의 원가)</h2>
+    <div class="text-2xl font-bold text-white mb-1">1kg = 20,000원</div>
+    <div class="text-xs text-gray-500">매일 오전 9시 자동 업데이트 됨</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex text-center border-b border-gray-800">
+    <button class="flex-1 py-3 text-sm tab-active" onclick="switchTab(1)" id="tab1">1) 상장형(비철)</button>
+    <button class="flex-1 py-3 text-sm tab-inactive" onclick="switchTab(2)" id="tab2">2) 코넥스형(폐자원)</button>
+    <button class="flex-1 py-3 text-sm tab-inactive" onclick="switchTab(3)" id="tab3">3) 작업철 감정</button>
+  </div>
+
+  <!-- Content 1: 비철 -->
+  <div id="content1" class="p-4">
+    <div class="flex text-xs text-gray-500 mb-2 px-2">
+      <div class="flex-1">품목</div>
+      <div class="w-24 text-right">kg 단가</div>
+      <div class="w-20 text-right">전일대비</div>
+    </div>
+    <!-- Item 1 -->
+    <div class="flex items-center py-3 border-b border-gray-800 px-2">
+      <div class="flex-1">
+        <div class="font-bold text-red-400 text-base">꽈배기동</div>
+        <div class="text-xs text-gray-400">A급 구리선 (90% 적용)</div>
+      </div>
+      <div class="w-24 text-right font-bold text-lg">18,000</div>
+      <div class="w-20 text-right text-sm text-red-500">▲ 300</div>
+    </div>
+    <!-- Item 2 -->
+    <div class="flex items-center py-3 border-b border-gray-800 px-2">
+      <div class="flex-1">
+        <div class="font-bold text-red-400 text-base">상동</div>
+        <div class="text-xs text-gray-400">깨끗한 파이프 (85% 적용)</div>
+      </div>
+      <div class="w-24 text-right font-bold text-lg">17,000</div>
+      <div class="w-20 text-right text-sm text-red-500">▲ 200</div>
+    </div>
+    <!-- Item 3 -->
+    <div class="flex items-center py-3 border-b border-gray-800 px-2">
+      <div class="flex-1">
+        <div class="font-bold text-blue-400 text-base">파동</div>
+        <div class="text-xs text-gray-400">도금/이물질 (75% 적용)</div>
+      </div>
+      <div class="w-24 text-right font-bold text-lg">15,000</div>
+      <div class="w-20 text-right text-sm text-blue-500">▼ 150</div>
+    </div>
+    <!-- Item 4 -->
+    <div class="flex items-center py-3 border-b border-gray-800 px-2">
+      <div class="flex-1">
+        <div class="font-bold text-red-400 text-base">신주 (황동)</div>
+        <div class="text-xs text-gray-400">절봉/노베 혼합 (50% 적용)</div>
+      </div>
+      <div class="w-24 text-right font-bold text-lg">10,000</div>
+      <div class="w-20 text-right text-sm text-red-500">▲ 50</div>
+    </div>
+  </div>
+
+  <!-- Content 2: 폐자원 -->
+  <div id="content2" class="p-4 hidden">
+     <div class="bg-gray-800 p-4 rounded-lg mb-4 text-center">
+        <h3 class="font-bold mb-2">도시광산 폐자원 단가</h3>
+        <p class="text-sm text-gray-400 mb-2">통신기판: 4,000원 / 청기판: 2,500원</p>
+        <div class="text-xs text-yellow-500"><i class="fa-solid fa-coins"></i> 거래 시 상평통보 순환토큰 적립</div>
+     </div>
+     <button class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg"><i class="fa-solid fa-camera mr-2"></i> 기판 사진 감정받기</button>
+  </div>
+
+  <!-- Content 3: 작업철 -->
+  <div id="content3" class="p-4 hidden">
+     <div class="bg-gray-800 p-4 rounded-lg mb-4 text-center">
+        <i class="fa-solid fa-screwdriver-wrench text-3xl text-gray-500 mb-3"></i>
+        <h3 class="font-bold mb-2">작업철 감정</h3>
+        <p class="text-sm text-gray-400">모터, 실외기 등은 속을 봐야 정확한 가치를 알 수 있습니다.</p>
+     </div>
+     <button class="w-full bg-green-600 text-white font-bold py-3 rounded-lg"><i class="fa-solid fa-comments mr-2"></i> 사진 찍고 무료 견적 채팅하기</button>
+  </div>
+
+  <!-- Floating Calc Button -->
+  <div class="fixed bottom-0 left-0 w-full p-4 bg-gray-900 border-t border-gray-800">
+     <button class="w-full bg-gray-700 text-white font-bold py-3 rounded-lg shadow-lg border border-gray-600"><i class="fa-solid fa-calculator mr-2"></i> 미리 계산하기 및 예약</button>
+  </div>
+
+  <script>
+    function switchTab(tabNum) {
+      for(let i=1; i<=3; i++) {
+        document.getElementById('content'+i).classList.add('hidden');
+        document.getElementById('tab'+i).classList.remove('tab-active');
+        document.getElementById('tab'+i).classList.add('tab-inactive');
+      }
+      document.getElementById('content'+tabNum).classList.remove('hidden');
+      document.getElementById('tab'+tabNum).classList.remove('tab-inactive');
+      document.getElementById('tab'+tabNum).classList.add('tab-active');
+    }
+  </script>
+</body>
+</html>
