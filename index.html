@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,8 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>도매상단</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    // ========================================================
+    // 💡 [사장님 전용] 매일 아침 여기서 숫자 딱 2개만 바꾸세요! 💡
+    // ========================================================
+    const 오늘시세 = 20000; // 오늘 1kg 기준가 (숫자만 입력)
+    const 어제시세 = 19667; // 어제 1kg 기준가 (숫자만 입력, 등락 계산용)
+    // ========================================================
+
+    // 아래는 자동으로 계산해주는 프로그램입니다. (건드리지 마세요)
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. 메인 시세 화면 표시
+      document.getElementById("main-price").innerText = "1kg = " + 오늘시세.toLocaleString('ko-KR') + "원";
+
+      // 2. 품목별 마진율 설정 (90%, 85%, 75%, 50%)
+      const rates = [
+        { id: 'item1', rate: 0.90 }, 
+        { id: 'item2', rate: 0.85 }, 
+        { id: 'item3', rate: 0.75 }, 
+        { id: 'item4', rate: 0.50 }  
+      ];
+
+      // 3. 자동 계산 및 화면 업데이트
+      rates.forEach(item => {
+        let price = Math.round(오늘시세 * item.rate);
+        let prevPrice = Math.round(어제시세 * item.rate);
+        let diff = price - prevPrice;
+
+        // 가격 입력
+        document.getElementById(item.id + "-price").innerText = price.toLocaleString('ko-KR');
+
+        // 등락 기호(▲/▼/-) 및 색상 자동 변경
+        let diffEl = document.getElementById(item.id + "-diff");
+        if (diff > 0) {
+          diffEl.innerHTML = "▲ " + diff.toLocaleString('ko-KR');
+          diffEl.className = "text-red-500 text-sm w-16 text-right font-bold";
+        } else if (diff < 0) {
+          diffEl.innerHTML = "▼ " + Math.abs(diff).toLocaleString('ko-KR');
+          diffEl.className = "text-blue-500 text-sm w-16 text-right font-bold";
+        } else {
+          diffEl.innerHTML = "- 0";
+          diffEl.className = "text-gray-400 text-sm w-16 text-right";
+        }
+      });
+    });
+  </script>
+
   <style>
-    /* 탭 화면 전환용 CSS */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     .tab-btn.active { color: #22c55e; border-bottom: 2px solid #22c55e; font-weight: bold; }
@@ -16,13 +61,11 @@
 </head>
 <body class="bg-[#0f172a] text-gray-100 pb-32 font-sans">
   
-  <!-- 상단 배너 -->
   <div class="bg-gray-800 text-xs p-3 flex justify-between items-center border-b border-gray-700">
     <span class="text-gray-300">앱을 설치하고 터치 한 번으로 매일 시세를 확인하세요.</span>
     <button onclick="alert('홈 화면에 추가하려면 스마트폰 브라우저 메뉴(⋮)에서 \'홈 화면에 추가\'를 선택해주세요.')" class="bg-green-600 text-white px-3 py-1.5 rounded font-bold shrink-0 ml-2">홈 화면에 추가</button>
   </div>
 
-  <!-- 헤더 -->
   <header class="p-4 flex justify-between items-center">
     <div class="flex items-center space-x-2">
       <span class="text-green-500 text-2xl">📚</span>
@@ -31,29 +74,24 @@
     <span class="text-xs bg-gray-800 text-gray-300 px-3 py-1 rounded-full border border-gray-700">📍 해운대 거점</span>
   </header>
 
-  <!-- 메인 연락처 안내 -->
   <div class="mx-4 mb-2 text-center bg-gray-800 p-3 rounded-lg border border-gray-700">
     <p class="text-lg font-bold text-green-400">📞 010 - 5813 - 3339</p>
     <p class="text-xs text-gray-400 mt-1">(문자 메세지 남겨 주시기 바랍니다)</p>
   </div>
 
-  <!-- 시세표 메인 화면 -->
   <div class="mx-4 mb-4 p-5 bg-gray-800 rounded-xl border border-gray-700">
     <div class="flex items-center text-blue-400 text-sm mb-2">
-      <span>🌐 LME 구리 국제 기준가 (오늘의 원가)</span>
+      <span>🌐 LME 구리 국제 기준가 (오늘의 기준 시세)</span>
     </div>
-    <div class="text-3xl font-bold mb-2">1kg = 20,000원</div>
-    <div class="text-xs text-gray-400">매일 오전 9시 자동 업데이트 됨</div>
+    <div id="main-price" class="text-3xl font-bold"></div>
   </div>
 
-  <!-- 탭 버튼 -->
   <div class="flex border-b border-gray-700 px-4 text-sm mt-6">
     <button onclick="changeTab('tab1')" id="btn-tab1" class="tab-btn active flex-1 pb-3 text-center transition-all">1) 상장형(비철)</button>
     <button onclick="changeTab('tab2')" id="btn-tab2" class="tab-btn flex-1 pb-3 text-center transition-all">2) 코넥스형(폐자원)</button>
     <button onclick="changeTab('tab3')" id="btn-tab3" class="tab-btn flex-1 pb-3 text-center transition-all">3) 작업철 감정</button>
   </div>
 
-  <!-- 탭 1: 상장형(비철) -->
   <div id="tab1" class="tab-content active px-4 pt-4">
     <div class="flex justify-between text-xs text-gray-400 mb-4 px-1">
       <span>품목</span>
@@ -68,9 +106,9 @@
         <div class="font-bold text-red-400 text-lg">꽈배기동</div>
         <div class="text-xs text-gray-400">A급 구리선 (90% 적용)</div>
       </div>
-      <div class="flex items-center space-x-6">
-        <span class="font-bold text-lg">18,000</span>
-        <span class="text-red-500 text-sm w-12 text-right">▲ 300</span>
+      <div class="flex items-center space-x-2">
+        <span id="item1-price" class="font-bold text-lg w-16 text-right"></span>
+        <span id="item1-diff"></span>
       </div>
     </div>
     
@@ -79,9 +117,9 @@
         <div class="font-bold text-red-300 text-lg">상동</div>
         <div class="text-xs text-gray-400">깨끗한 파이프 (85% 적용)</div>
       </div>
-      <div class="flex items-center space-x-6">
-        <span class="font-bold text-lg">17,000</span>
-        <span class="text-red-500 text-sm w-12 text-right">▲ 200</span>
+      <div class="flex items-center space-x-2">
+        <span id="item2-price" class="font-bold text-lg w-16 text-right"></span>
+        <span id="item2-diff"></span>
       </div>
     </div>
     
@@ -90,9 +128,9 @@
         <div class="font-bold text-blue-400 text-lg">파동</div>
         <div class="text-xs text-gray-400">도금/이물질 (75% 적용)</div>
       </div>
-      <div class="flex items-center space-x-6">
-        <span class="font-bold text-lg">15,000</span>
-        <span class="text-blue-500 text-sm w-12 text-right">▼ 150</span>
+      <div class="flex items-center space-x-2">
+        <span id="item3-price" class="font-bold text-lg w-16 text-right"></span>
+        <span id="item3-diff"></span>
       </div>
     </div>
     
@@ -101,14 +139,13 @@
         <div class="font-bold text-red-300 text-lg">신주 (황동)</div>
         <div class="text-xs text-gray-400">절봉/노베 혼합 (50% 적용)</div>
       </div>
-      <div class="flex items-center space-x-6">
-        <span class="font-bold text-lg">10,000</span>
-        <span class="text-red-500 text-sm w-12 text-right">▲ 50</span>
+      <div class="flex items-center space-x-2">
+        <span id="item4-price" class="font-bold text-lg w-16 text-right"></span>
+        <span id="item4-diff"></span>
       </div>
     </div>
   </div>
 
-  <!-- 탭 2: 코넥스형(폐자원) -->
   <div id="tab2" class="tab-content px-4 pt-6">
     <div class="bg-gray-800 rounded-xl p-6 text-center border border-gray-700 mb-6 shadow-lg">
       <h3 class="font-bold text-lg mb-4 text-white">도시광산 폐자원 단가</h3>
@@ -120,7 +157,6 @@
     </button>
   </div>
 
-  <!-- 탭 3: 작업철 감정 -->
   <div id="tab3" class="tab-content px-4 pt-6">
     <div class="bg-gray-800 rounded-xl p-6 text-center border border-gray-700 mb-6 shadow-lg">
       <div class="text-4xl mb-4">🛠️</div>
@@ -133,7 +169,6 @@
     </button>
   </div>
 
-  <!-- 하단 고정 버튼 -->
   <div style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: #1e293b; padding: 16px; border-top: 1px solid #334155; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.3);">
      <button onclick="window.location.href='sms:01058133339'" 
              style="width: 100%; background: #334155; color: white; font-weight: bold; padding: 18px; border-radius: 12px; border: 1px solid #475569; font-size: 16px;">
@@ -141,20 +176,13 @@
      </button>
   </div>
 
-  <!-- 탭 전환 자바스크립트 -->
   <script>
     function changeTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(function(el) {
-        el.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-btn').forEach(function(el) {
-        el.classList.remove('active');
-      });
-      
+      document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
       document.getElementById(tabId).classList.add('active');
       document.getElementById('btn-' + tabId).classList.add('active');
     }
   </script>
-
 </body>
 </html>
